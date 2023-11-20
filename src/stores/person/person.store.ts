@@ -1,5 +1,6 @@
 import { type StateCreator, create } from "zustand";
-import { StateStorage, createJSONStorage, persist } from "zustand/middleware";
+import { persist } from "zustand/middleware";
+import { customSesionStorage } from "../storages/sseion-storage.storage";
 
 interface PersonState {
     firstName: string;
@@ -20,22 +21,7 @@ const storeApi: StateCreator<PersonState & Actions> = (set) =>({
 
 })
 
-const sesionStorage: StateStorage = {
-    getItem: function (name: string): string | Promise<string | null> | null {
-        console.log('getItem',name);
 
-        return null;
-
-    },
-    setItem: function (name: string, value: string): void | Promise<void> {
-        console.log('setItem',{name, value});
-        
-    },
-    removeItem: function (name: string): void | Promise<void> {
-        console.log('removeItem', name);
-        
-    }
-}
 
 export const usePersonStore = create<PersonState & Actions>()( 
     
@@ -43,7 +29,7 @@ export const usePersonStore = create<PersonState & Actions>()(
         storeApi
     ,{  
         name: 'person-storage',
-        storage: createJSONStorage( () => sesionStorage)
+        storage: customSesionStorage,
     })
 
 );
